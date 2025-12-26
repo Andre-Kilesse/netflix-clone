@@ -1,6 +1,7 @@
 import axios from "axios";
 import { ENV_VARS } from "../config/envVars.js";
 
+// padroniza o fetch da api TMDB
 export const fetchFromTMDB = async (url) => {
     const options = {
         headers: {
