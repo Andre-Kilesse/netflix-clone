@@ -61,17 +61,17 @@ export async function login(req, res) {
         const { email, password } = req.body;
 
         if (!email || !password) {
-            return res.status(400).json({ success: false, message: "All fields are required" })
+            return res.status(400).json({ success: false, message: "All fields are required" });
         }
 
-        const user = await User.findOne({ email: email });
+        const user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).json({ success: false, message: "Invalid credentials" })
+            return res.status(400).json({ success: false, message: "Invalid credentials" });
         }
 
-        const isPasswordCorrect = await bcryptjs.compare({ password: user.password });
+        const isPasswordCorrect = await bcryptjs.compare(password, user.password);
         if (!isPasswordCorrect) {
-            return res.status(400).json({ success: false, message: "Invalid credentials" })
+            return res.status(400).json({ success: false, message: "Invalid credentials" });
         }
 
         generateTokenAndSetCookie(user._id, res);
@@ -80,9 +80,10 @@ export async function login(req, res) {
             success: true,
             user: {
                 ...user._doc,
-                password: ""
-            }
-        })
+                password: "",
+            },
+        });
+
     } catch (error) {
         console.log("Error in login controller", error.message);
         res.status(500).json({ success: false, message: "Internal server error" });
